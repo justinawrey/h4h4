@@ -50,7 +50,7 @@ class App extends Component {
             return (
                 <div className="flex-container">
                     <h1>An error occurred...</h1>
-                    <button onClick={() => this.getNewJoke()}>TRY AGAIN!</button>
+                    <button onClick={() => this.getNewJoke()}></button>
                 </div>
             );
         } else {
