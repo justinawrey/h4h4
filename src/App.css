@@ -1,0 +1,57 @@
+html, body {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
+body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Inconsolata', monospace;
+    font-size: 20px;
+    background-color: #9CFBFF;
+}
+
+h1 {
+    text-align: center;
+    color: black;
+    background: #FFB383;
+    margin-left: 7%;
+    margin-right: 7%;
+}
+
+button {
+    align-self: center;
+    border: none;
+    background-color: #FFB383;    
+    font-size: 25px;
+    font-style: italic;
+    font-weight: bold;
+    font-family: 'Inconsolata', monospace;
+    padding: 10px 10px 10px 10px;
+    background-image: url("images/refresh.png");
+    background-size: 50px 50px;
+    height: 50px;
+    width: 50px;
+}
+
+button:hover {
+    background-color: #B28666;
+    animation: spinning linear 2s infinite;
+}
+
+button:focus {
+    outline-width: 0px;
+}
+
+.flex-container {
+    display: flex;
+    flex-direction: column;
+}
+
+@keyframes spinning {
+    0% {transform: rotate(0deg); }
+    50% {transform: rotate(180deg); }
+    100% {transform: rotate(360deg); }
+}
