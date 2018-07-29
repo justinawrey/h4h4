@@ -37,10 +37,10 @@ class App extends Component {
     }
 
     componentDidMount() {
-        this.getNewJoke('visible')
+        this.getNewJoke()
     }
 
-    async getNewJoke(anim) {
+    async getNewJoke() {
         this.setState({ fetching: true })
         await this.sleep(1000) // fake sleep
         fetch(jokeApi)
