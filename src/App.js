@@ -1,68 +1,87 @@
-import React, { Component } from 'react';
-import './App.css';
+import React, { Component } from 'react'
+import posed from 'react-pose'
+import './App.css'
 
-const jokeApi = "https://08ad1pao69.execute-api.us-east-1.amazonaws.com/dev/random_joke";
+const jokeApi =
+    'https://08ad1pao69.execute-api.us-east-1.amazonaws.com/dev/random_joke'
 
-function Joke(props) {
-    return (
-        <div>
-            <h1>{props.setup}</h1>
-            <h1>{props.punchline}</h1>
-        </div>
-    );
-}
+const Joke = ({ setup, punchline }) => (
+    <div>
+        <h1>{setup}</h1>
+        <h1>{punchline}</h1>
+    </div>
+)
+
+const Animated = posed.div({
+    hidden: {
+        scale: '0.7',
+    },
+    visible: {
+        scale: '1',
+    },
+})
 
 class App extends Component {
     constructor(props) {
-        super(props);
+        super(props)
         this.state = {
             error: null,
-            setup: "",
-            punchline: "",
-        };
+            fetching: 'false',
+            setup: '',
+            punchline: '',
+        }
+    }
+
+    sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms))
     }
 
     componentDidMount() {
-        this.getNewJoke();
+        this.getNewJoke('visible')
     }
 
-    getNewJoke() {
+    async getNewJoke(anim) {
+        this.setState({ fetching: true })
+        await this.sleep(1000) // fake sleep
         fetch(jokeApi)
-        .then(response => response.json())
-        .then(result => {
-            this.setState({
-                setup: result.setup,
-                punchline: result.punchline, 
-            });
-        },
-        error => {
-            this.setState({
-                error: error,
-            });
-        });
+            .then(response => response.json())
+            .then(
+                ({ setup, punchline }) => {
+                    this.setState({
+                        setup,
+                        punchline,
+                        fetching: false,
+                    })
+                },
+                error => {
+                    this.setState({
+                        error,
+                        fetching: false,
+                    })
+                },
+            )
     }
 
     render() {
+        const { error, fetching, setup, punchline } = this.state
 
-        const {error, setup, punchline} = this.state;
-
-        if (error) {
-            return (
-                <div className="flex-container">
+        return fetching ? (
+            <div className="loader" />
+        ) : (
+            <Animated
+                className="flex-container"
+                initialPose="hidden"
+                pose="visible"
+            >
+                {error ? (
                     <h1>An error occurred...</h1>
-                    <button onClick={() => this.getNewJoke()}></button>
-                </div>
-            );
-        } else {
-            return (
-                <div className="flex-container">
-                    <Joke setup={setup} punchline={punchline}/>
-                    <button onClick={() => this.getNewJoke()}></button>
-                </div>
-            );
-        }
+                ) : (
+                    <Joke setup={setup} punchline={punchline} />
+                )}
+                <button onClick={() => this.getNewJoke()} />
+            </Animated>
+        )
     }
 }
 
-
-export default App;
+export default App
